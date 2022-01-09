@@ -1,0 +1,109 @@
+price-of-star: 7500.0
+name-of-mobsword-currency: 'Shards'
+
+mob-sword-item-type: DIAMOND_SWORD
+mob-sword-item-name: '&f=-= &9&lMob&2Sword&7&l &f=-='
+mob-sword-item-lore:
+  - 'This is a mob sword!'
+  - ''
+  - '&7&lKey Finder: &6{keyFinderValue}'
+  - '&7&lSpawner Finder: &6{spawnerFinderValue}'
+  - '&7&lAutosell: &6{autosellValue} &8({autosellEnabled})'
+  - '&7&lSell Multiplier: &6{sellMultiplierValue}'
+  - '&7&lDouble Chance: &6{doubleChanceValue}'
+mob-sword-item-enchants:
+  - 'DAMAGE_ALL:5'
+
+mob-type: SILVERFISH
+mob-exp-drop: 20
+
+# key/spawner-finder format: "percent command | broadcast"
+key-finder:
+  - '5 cc give virtual SCORGE 1 {PLAYER} | &a{PLAYER} has won &61x &cScorge &aKey.'
+  - '20 cc give virtual LEGENDARY 1 {PLAYER} | &a{PLAYER} has won &61x &cLegendary &aKey.'
+  - '30 cc give virtual RARE 1 {PLAYER} | &a{PLAYER} has won &61x &cRare &aKey.'
+  - '45 cc give virtual COMMON 1 {PLAYER} | &a{PLAYER} has won &61x &cCommon &aKey.'
+
+spawner-finder:
+  - '5 ss give {PLAYER} villager 1 | &a{PLAYER} has won &61x &aVillager &aSpawner.'
+  - '8 ss give {PLAYER} witch 1 | &a{PLAYER} has won &61x &5Witch &aSpawner.'
+  - '10 ss give {PLAYER} irongolem 2 | &a{PLAYER} has won &62x &fIron Golem &aSpawners.'
+  - '10 ss give {PLAYER} irongolem 1 | &a{PLAYER} has won &61x &fIron Golem &aSpawner.'
+  - '15 ss give {PLAYER} blaze 2 | &a{PLAYER} has won &62x &eBlaze &aSpawners.'
+  - '15 ss give {PLAYER} blaze 1 | &a{PLAYER} has won &61x &eBlaze &aSpawner.'
+
+upgrade-item-name: '&5&l*** &6&l{type} Upgrade &5&l***'
+
+upgrade-item-lore:
+  - ''
+  - '&7&lCurrent Value: &6{currentValue}'
+  - '&7&lNext Value: &6{nextValue}'
+  - '&7&lPrice: &6{price}'
+
+currency-item-name: '&a&lAmount of {currency}'
+currency-item-lore:
+  - ''
+  - '&7You currently have: &6{currentValue} &7{currency}.'
+
+max-key-finder: 50
+max-spawner-finder: 50
+max-double-chance: 0.5
+max-sell-multiplier: 1.5
+
+# price rate formula = startPrice * rate * (currentLevel+1)
+key-finder-price-start: 100.0
+key-finder-price-rate: 1.5
+
+spawner-finder-price-start: 100.0
+spawner-finder-price-rate: 1.5
+
+double-chance-price-start: 200.0
+double-chance-increment: 0.05
+double-chance-price-rate: 2.0
+
+sell-multiplier-price-start: 200.0
+sell-multiplier-increment: 0.05
+sell-multiplier-price-rate: 2.0
+
+auto-sell-price: 5000.0
+
+item-sent-message: '&a&l(!) &aTarget received a MobSword!'
+
+item-received-message: '&a&l(!) &aYou have received a MobSword!'
+
+balance-message: '&a&l(!) &aYou currently have {amount} {customCurrency}.'
+
+change-balance-message: '&a&l(!) &a{player}''s balance has been successfully set to {amount} {customCurrency}.'
+
+changed-balance-message: '&a&l(!) &aYour balance has been set to {amount} {customCurrency}.'
+
+money-in-last-minute-message: '&a&l(!) &aYou have earned ${amount} in the last minute from selling.'
+
+no-permission-message: '&c&l(!) &cYou do not have the permission to execute this command!'
+
+no-player-message: '&c&l(!) &cInvalid username!'
+
+not-number-message: "&c&l(!) &cValue not a number!"
+
+no-sword-message: '&c&l(!) &cPlease hold a mob sword in your hand before running this command!'
+
+stat-already-maxed-message: '&c&l(!) &c{type} is already at the maximum value!'
+
+too-poor-message: '&c&l(!) &cYou cannot afford this upgrade!'
+
+successful-upgrade-purchase-message: '&c&l(!) &aYou have successfully upgraded your mob sword''s {type} for {price}!'
+
+toggle-autosell-message: '&c&l(!) &aYou have {value} AutoSell!'
+
+help-command:
+  - '&8&m----------------------------------------------------'
+  - ''
+  - '              &7Version &a[{version}] &7by &a&ncaptain_bboy'
+  - ''
+  - '&e&l(!) &7/mobswords give &e<player> [keyfinder] [spawnerfinder] [doublechance] [autosell] [sellmult]'
+  - '&e&l(!) &7/mobswords balance &e[player]'
+  - '&e&l(!) &7/mobswords setbalance &e<player> <value>'
+  - '&e&l(!) &7/mobswords addbalance &e<player> <value>'
+  - '&e&l(!) &7/mobswords removebalance &e<player> <value>'
+  - ''
+  - '&8&m----------------------------------------------------'

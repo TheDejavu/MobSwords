@@ -1,0 +1,16 @@
+name: MobSwords
+version: '${project.version}'
+main: com.captainbboy.mobswords.MobSwords
+api-version: 1.18
+authors: [ captain_bboy ]
+depend:
+  - Vault
+softdepend:
+  - PlaceholderAPI
+commands:
+  mobsword:
+    description: Manage mob swords!
+    aliases:
+      - ms
+      - sword
+      - mobswords
