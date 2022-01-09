@@ -13,4 +13,4 @@ This is a 1.8.8 Spigot plugin that adds upgradable, customizable harvester hoes 
 * /mobsword subtractbalance \<username> [value] - Remove from the balance of a user in mobsword currency.
 
 ## TODO:
-* Add plugin support for ShopGUIPlus and similar shop plugins to automatically gather the price of sugarcane.
+* Add plugin support for ShopGUIPlus and similar shop plugins to automatically gather the price of netherstars.
