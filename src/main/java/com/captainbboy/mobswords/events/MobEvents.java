@@ -88,13 +88,13 @@ public class MobEvents implements Listener {
                         e.getDrops().clear();
                     } else {
                         e.getDrops().clear();
-                        e.setDroppedExp(20);
+                        e.setDroppedExp(this.plugin.getConfig().getInt("mob-exp-drop"));
                         Location loc = e.getEntity().getLocation();
                         loc.getWorld().dropItem(loc, new ItemStack(Material.NETHER_STAR));
                     }
                 }  else {
                     e.getDrops().clear();
-                    e.setDroppedExp(20);
+                    e.setDroppedExp(this.plugin.getConfig().getInt("mob-exp-drop"));
                     Location loc = e.getEntity().getLocation();
                     loc.getWorld().dropItem(loc, new ItemStack(Material.NETHER_STAR));
                 }
