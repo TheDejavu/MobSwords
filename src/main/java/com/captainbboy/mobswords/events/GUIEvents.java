@@ -164,7 +164,6 @@ public class GUIEvents implements Listener {
     }
 
     private void endPurchase(Player p) {
-        p.closeInventory();
         PlayerClickEvent.promptUpgradeMenu(this.plugin, p, new NBTItem(p.getItemInHand()));
     }
 

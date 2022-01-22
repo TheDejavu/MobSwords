@@ -105,6 +105,8 @@ public abstract class Database {
             ps = conn.prepareStatement("UPDATE currency SET amount = ? WHERE uuid = '"+playerUUID.toString()+"'");
             ps.setString(1, String.valueOf(amount));
             ps.executeUpdate();
+            if(plugin.getExpansion() != null)
+                plugin.getExpansion().setValue(playerUUID, amount);
             return "worked";
         } catch (SQLException ex) {
             plugin.getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);

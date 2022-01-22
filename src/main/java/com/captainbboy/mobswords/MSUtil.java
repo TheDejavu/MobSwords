@@ -53,7 +53,7 @@ public class MSUtil {
             return false;
         }
         try {
-            double d = Double.parseDouble(strNum);
+            double d = Double.parseDouble(strNum.replaceAll(",", ""));
         } catch (NumberFormatException nfe) {
             return false;
         }
@@ -63,7 +63,7 @@ public class MSUtil {
     public static double getNumber(String strNum) {
         double d;
         try {
-            d = Double.parseDouble(strNum);
+            d = Double.parseDouble(strNum.replaceAll(",", ""));
         } catch (NumberFormatException nfe) {
             return 0.0d;
         }
@@ -83,7 +83,7 @@ public class MSUtil {
     }
 
     public static Double roundToHundredths(Double x) {
-        return(0.01 * Math.floor(x * 100.0));
+        return getNumber(formatNumber(x));
     }
 
     public static Double roundToHundred(double input) {

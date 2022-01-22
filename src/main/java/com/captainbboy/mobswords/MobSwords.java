@@ -5,6 +5,7 @@ import com.captainbboy.mobswords.commands.MainCommand;
 import com.captainbboy.mobswords.events.GUIEvents;
 import com.captainbboy.mobswords.events.MobEvents;
 import com.captainbboy.mobswords.events.PlayerClickEvent;
+import com.captainbboy.mobswords.events.PlayerSessionEvent;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,6 +20,8 @@ import java.util.UUID;
 public final class MobSwords extends JavaPlugin {
 
     private PlayerHandler playerHandler = new PlayerHandler();
+    private MobSwordExpansion mobSwordExpansion;
+    private PlayerClickEvent playerClickEvent = new PlayerClickEvent(this);
     private SQLite sqLite;
     public String currVersion = "1.0";
     public Economy eco;
@@ -40,8 +43,9 @@ public final class MobSwords extends JavaPlugin {
         sqLite.initialize();
 
         // Events
+        getServer().getPluginManager().registerEvents(new PlayerSessionEvent(this), this);
         getServer().getPluginManager().registerEvents(new MobEvents(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerClickEvent(this), this);
+        getServer().getPluginManager().registerEvents(playerClickEvent, this);
         getServer().getPluginManager().registerEvents(new GUIEvents(this), this);
 
         // Commands
@@ -52,7 +56,8 @@ public final class MobSwords extends JavaPlugin {
         startMinuteMessages();
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new MobSwordExpansion(this).register();
+            mobSwordExpansion = new MobSwordExpansion(this);
+            mobSwordExpansion.register();
         }
     }
 
@@ -97,4 +102,13 @@ public final class MobSwords extends JavaPlugin {
     public PlayerHandler getPlayerHandler() {
         return this.playerHandler;
     }
+
+    public MobSwordExpansion getExpansion() {
+        return this.mobSwordExpansion;
+    }
+
+    public PlayerClickEvent getPlayerClickEvent() {
+        return this.playerClickEvent;
+    }
+
 }

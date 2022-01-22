@@ -78,7 +78,7 @@ public class PlayerClickEvent implements Listener {
                             itemMeta.setLore(lores);
                             item2.setItemMeta(itemMeta);
 
-                            NBTItem nbtItem2 = new NBTItem(item2);
+//                            NBTItem nbtItem2 = new NBTItem(item2);
 //                            this.plugin.getLogger().info("after: "+nbtItem2.getBoolean("mobSwordAutoSellEnabled"));
 
                             p.setItemInHand(item2);
@@ -96,7 +96,18 @@ public class PlayerClickEvent implements Listener {
     }
 
     public static void promptUpgradeMenu(MobSwords plugin, Player p, NBTItem nbtItem) {
-        Inventory inv = Bukkit.createInventory(p, InventoryType.CHEST, MSUtil.cvtStr("&5&lMobSword Upgrades"));
+        promptUpgradeMenu(plugin, p, nbtItem, null);
+    }
+
+    public static void promptUpgradeMenu(MobSwords plugin, Player p, NBTItem nbtItem, Inventory inventory) {
+
+        Inventory inv;
+
+        if(inventory == null)
+            inv = Bukkit.createInventory(p, InventoryType.CHEST, MSUtil.cvtStr("&5&lMobSword Upgrades"));
+        else
+            inv = inventory;
+
         ItemStack[] items = inv.getContents();
         for (int i = 0; i < items.length; i++) {
             ItemStack glass = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7);
@@ -250,7 +261,7 @@ public class PlayerClickEvent implements Listener {
         List<String> baseCurrencyLore = config.getStringList("currency-item-lore");
         List<String> currencyShowLore =  new ArrayList<>();
         for (String s : baseCurrencyLore) {
-            s = s.replaceAll("\\{currentValue}", String.valueOf(MSUtil.roundToHundredths(currencyValue)));
+            s = s.replaceAll("\\{currentValue}", MSUtil.formatNumber(MSUtil.roundToHundredths(currencyValue)));
             s = s.replaceAll("\\{currency}", currencyName);
             currencyShowLore.add(MSUtil.cvtStr(s));
         }
@@ -260,7 +271,9 @@ public class PlayerClickEvent implements Listener {
         items[18] = currencyShow;
 
         inv.setContents(items);
-        p.openInventory(inv);
+        if(inventory == null)
+            p.openInventory(inv);
+
     }
 
 }
