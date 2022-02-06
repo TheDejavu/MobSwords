@@ -23,11 +23,19 @@ public final class MobSwords extends JavaPlugin {
     private MobSwordExpansion mobSwordExpansion;
     private PlayerClickEvent playerClickEvent = new PlayerClickEvent(this);
     private SQLite sqLite;
-    public String currVersion = "1.0";
+    public String currVersion = "1.1.1";
     public Economy eco;
 
     @Override
     public void onEnable() {
+
+        // Check Dependencies
+        if(getServer().getPluginManager().getPlugin("NBTAPI") == null) {
+            getServer().getConsoleSender().sendMessage(MSUtil.cvtStr("[&9&lMob&2Swords&7&l] &cYou must have NBTAPI installed!"));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         if (!setupEconomy()) {
             getServer().getConsoleSender().sendMessage(MSUtil.cvtStr("[&9&lMob&2Swords&7&l] &cYou must have Vault and an Economy Plugin installed!"));
             getServer().getPluginManager().disablePlugin(this);

@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class MobEvents implements Listener {
 
-    MobSwords plugin;
+    private final MobSwords plugin;
 
     public MobEvents(MobSwords plg) {
         this.plugin = plg;

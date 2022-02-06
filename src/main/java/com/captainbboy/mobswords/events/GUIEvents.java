@@ -23,10 +23,10 @@ import java.util.List;
 
 public class GUIEvents implements Listener {
 
-    MobSwords plugin;
+    private final MobSwords plugin;
 
-    public GUIEvents(MobSwords plg) {
-        this.plugin = plg;
+    public GUIEvents(MobSwords plugin) {
+        this.plugin = plugin;
     }
 
     // Check for clicks on items
@@ -46,94 +46,100 @@ public class GUIEvents implements Listener {
         ItemStack sword = p.getItemInHand();
         FileConfiguration config = this.plugin.getConfig();
         NBTItem nbtItem = new NBTItem(sword);
-        Economy eco = this.plugin.eco;
 
-        if (nbtItem.hasKey("isMobSword") && nbtItem.getBoolean("isMobSword")) {
-            int keyFinderLevel = nbtItem.getInteger("mobSwordKeyFinder");
-            int spawnerFinderLevel = nbtItem.getInteger("mobSwordSpawnerFinder");
-            double doubleChance = nbtItem.getDouble("mobSwordDoubleChance");
-            double sellMultiplier = nbtItem.getDouble("mobSwordSellMult");
-            boolean autoSell = nbtItem.getBoolean("mobSwordAutoSell");
-            boolean autoSellEnabled = nbtItem.getBoolean("mobSwordAutoSellEnabled");
+        if (!nbtItem.hasKey("isMobSword") || !nbtItem.getBoolean("isMobSword")) {
+            p.sendMessage(MSUtil.cvtStr(config.getString("no-sword-message")));
+            return;
+        }
+
+        int keyFinderLevel = nbtItem.getInteger("mobSwordKeyFinder");
+        int spawnerFinderLevel = nbtItem.getInteger("mobSwordSpawnerFinder");
+        double doubleChance = nbtItem.getDouble("mobSwordDoubleChance");
+        double sellMultiplier = nbtItem.getDouble("mobSwordSellMult");
+        boolean autoSell = nbtItem.getBoolean("mobSwordAutoSell");
+        boolean autoSellEnabled = nbtItem.getBoolean("mobSwordAutoSellEnabled");
 
 
-            ItemStack item = e.getCurrentItem();
+        ItemStack item = e.getCurrentItem();
 
-            if (item.getType() == Material.TRIPWIRE_HOOK) {
+        switch (item.getType()) {
+            case TRIPWIRE_HOOK:
                 // Clicked Key Finder Upgrade
                 if(keyFinderLevel >= config.getInt("max-key-finder")) {
                     p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Key Finder")));
-                } else {
-                    Double price = calculatePrice(config.getDouble("key-finder-price-start"), config.getDouble("key-finder-price-rate"), Double.valueOf(keyFinderLevel));
-                    if(handlePurchase(p, "Key Finder", price)) {
-                        ItemStack newSword = handleItem(sword, keyFinderLevel + 1, spawnerFinderLevel, autoSell, sellMultiplier, doubleChance, autoSellEnabled);
-                        NBTItem nbti2 = new NBTItem(newSword);
-                        nbti2.setInteger("mobSwordKeyFinder", keyFinderLevel + 1);
-                        p.setItemInHand(nbti2.getItem());
-                        endPurchase(p);
-                    };
+                    break;
                 }
-            } else if (item.getType() == Material.MOB_SPAWNER) {
+                Double keyFinderPrice = calculatePrice(config.getDouble("key-finder-price-start"), config.getDouble("key-finder-price-rate"), Double.valueOf(keyFinderLevel));
+                if(handlePurchase(p, "Key Finder", keyFinderPrice)) {
+                    ItemStack newSword = handleItem(sword, keyFinderLevel + 1, spawnerFinderLevel, autoSell, sellMultiplier, doubleChance, autoSellEnabled);
+                    NBTItem nbti2 = new NBTItem(newSword);
+                    nbti2.setInteger("mobSwordKeyFinder", keyFinderLevel + 1);
+                    p.setItemInHand(nbti2.getItem());
+                    endPurchase(p);
+                };
+                break;
+            case MOB_SPAWNER:
                 // Clicked Spawner Finder Upgrade
                 if(spawnerFinderLevel >= config.getInt("max-spawner-finder")) {
                     p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Spawner Finder")));
-                } else {
-                    Double price = calculatePrice(config.getDouble("spawner-finder-price-start"), config.getDouble("spawner-finder-price-rate"), Double.valueOf(spawnerFinderLevel));
-                    if(handlePurchase(p, "Spawner Finder", price)) {
-                        ItemStack newSword = handleItem(sword, keyFinderLevel, spawnerFinderLevel + 1, autoSell, sellMultiplier, doubleChance, autoSellEnabled);
-                        NBTItem nbti2 = new NBTItem(newSword);
-                        nbti2.setInteger("mobSwordSpawnerFinder", spawnerFinderLevel + 1);
-                        p.setItemInHand(nbti2.getItem());
-                        endPurchase(p);
-                    };
+                    break;
                 }
-            } else if (item.getType() == Material.GOLD_SWORD) {
+                Double spawnerFinderPrice = calculatePrice(config.getDouble("spawner-finder-price-start"), config.getDouble("spawner-finder-price-rate"), Double.valueOf(spawnerFinderLevel));
+                if(handlePurchase(p, "Spawner Finder", spawnerFinderPrice)) {
+                    ItemStack newSword = handleItem(sword, keyFinderLevel, spawnerFinderLevel + 1, autoSell, sellMultiplier, doubleChance, autoSellEnabled);
+                    NBTItem nbti2 = new NBTItem(newSword);
+                    nbti2.setInteger("mobSwordSpawnerFinder", spawnerFinderLevel + 1);
+                    p.setItemInHand(nbti2.getItem());
+                    endPurchase(p);
+                }
+                break;
+            case GOLD_SWORD:
                 // Clicked AutoSell Upgrade
                 if(autoSell == true) {
                     p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "AutoSell")));
-                } else {
-                    Double price = config.getDouble("auto-sell-price");
-                    if(handlePurchase(p, "AutoSell", price)) {
-                        ItemStack newHoe = handleItem(sword, keyFinderLevel, spawnerFinderLevel, true, sellMultiplier, doubleChance, autoSellEnabled);
-                        NBTItem nbti2 = new NBTItem(newHoe);
-                        nbti2.setBoolean("mobSwordAutoSell", true);
-                        p.setItemInHand(nbti2.getItem());
-                        endPurchase(p);
-                    };
+                    break;
                 }
-            } else if (item.getType() == Material.GOLD_NUGGET) {
+                Double autoSellPrice = config.getDouble("auto-sell-price");
+                if(handlePurchase(p, "AutoSell", autoSellPrice)) {
+                    ItemStack newHoe = handleItem(sword, keyFinderLevel, spawnerFinderLevel, true, sellMultiplier, doubleChance, autoSellEnabled);
+                    NBTItem nbti2 = new NBTItem(newHoe);
+                    nbti2.setBoolean("mobSwordAutoSell", true);
+                    p.setItemInHand(nbti2.getItem());
+                    endPurchase(p);
+                }
+                break;
+            case GOLD_NUGGET:
                 // Clicked Sell Multiplier Upgrade
                 if(sellMultiplier >= config.getDouble("max-sell-multiplier")) {
                     p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Sell Multiplier")));
-                } else {
-                    Double sellMultIncr = config.getDouble("sell-multiplier-increment");
-                    Double price = calculatePrice(config.getDouble("sell-multiplier-price-start"), config.getDouble("sell-multiplier-price-rate"), MSUtil.roundToHundredths((sellMultiplier - 1.0)/sellMultIncr));
-                    if(handlePurchase(p, "Sell Multiplier", price)) {
-                        ItemStack newHoe = handleItem(sword, keyFinderLevel, spawnerFinderLevel, autoSell, MSUtil.roundToHundredths(sellMultiplier + config.getDouble("sell-multiplier-increment")), doubleChance, autoSellEnabled);
-                        NBTItem nbti2 = new NBTItem(newHoe);
-                        nbti2.setDouble("mobSwordSellMult", MSUtil.roundToHundredths(sellMultiplier + config.getDouble("sell-multiplier-increment")));
-                        p.setItemInHand(nbti2.getItem());
-                        endPurchase(p);
-                    };
+                    break;
                 }
-            } else if (item.getType() == Material.DIAMOND) {
+                Double sellMultIncr = config.getDouble("sell-multiplier-increment");
+                Double sellMultPrice = calculatePrice(config.getDouble("sell-multiplier-price-start"), config.getDouble("sell-multiplier-price-rate"), MSUtil.roundToHundredths((sellMultiplier - 1.0)/sellMultIncr));
+                if(handlePurchase(p, "Sell Multiplier", sellMultPrice)) {
+                    ItemStack newHoe = handleItem(sword, keyFinderLevel, spawnerFinderLevel, autoSell, MSUtil.roundToHundredths(sellMultiplier + config.getDouble("sell-multiplier-increment")), doubleChance, autoSellEnabled);
+                    NBTItem nbti2 = new NBTItem(newHoe);
+                    nbti2.setDouble("mobSwordSellMult", MSUtil.roundToHundredths(sellMultiplier + config.getDouble("sell-multiplier-increment")));
+                    p.setItemInHand(nbti2.getItem());
+                    endPurchase(p);
+                }
+                break;
+            case DIAMOND:
                 // Clicked Double Chance Upgrade
                 if(doubleChance >= config.getDouble("max-double-chance")) {
                     p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Double Chance")));
-                } else {
-                    Double doubleChanceIncr = config.getDouble("double-chance-increment");
-                    Double price = calculatePrice(config.getDouble("double-chance-price-start"), config.getDouble("double-chance-price-rate"), MSUtil.roundToHundredths(doubleChance/doubleChanceIncr));
-                    if(handlePurchase(p, "Double Chance", price)) {
-                        ItemStack newHoe = handleItem(sword, keyFinderLevel, spawnerFinderLevel, autoSell, sellMultiplier, MSUtil.roundToHundredths(sellMultiplier + config.getDouble("double-chance-increment")), autoSellEnabled);
-                        NBTItem nbti2 = new NBTItem(newHoe);
-                        nbti2.setDouble("mobSwordDoubleChance", MSUtil.roundToHundredths(doubleChance + config.getDouble("double-chance-increment")));
-                        p.setItemInHand(nbti2.getItem());
-                        endPurchase(p);
-                    };
+                    break;
                 }
-            }
-        } else {
-            p.sendMessage(MSUtil.cvtStr(config.getString("no-sword-message")));
+                Double doubleChanceIncr = config.getDouble("double-chance-increment");
+                Double price = calculatePrice(config.getDouble("double-chance-price-start"), config.getDouble("double-chance-price-rate"), MSUtil.roundToHundredths(doubleChance/doubleChanceIncr));
+                if(handlePurchase(p, "Double Chance", price)) {
+                    ItemStack newHoe = handleItem(sword, keyFinderLevel, spawnerFinderLevel, autoSell, sellMultiplier, MSUtil.roundToHundredths(sellMultiplier + config.getDouble("double-chance-increment")), autoSellEnabled);
+                    NBTItem nbti2 = new NBTItem(newHoe);
+                    nbti2.setDouble("mobSwordDoubleChance", MSUtil.roundToHundredths(doubleChance + config.getDouble("double-chance-increment")));
+                    p.setItemInHand(nbti2.getItem());
+                    endPurchase(p);
+                }
+                break;
         }
     }
 

@@ -5,6 +5,7 @@ api-version: 1.18
 authors: [ captain_bboy ]
 depend:
   - Vault
+  - NBTAPI
 softdepend:
   - PlaceholderAPI
 commands:

@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerSessionEvent implements Listener {
 
-    MobSwords plugin;
+    private final MobSwords plugin;
 
     public PlayerSessionEvent(MobSwords plg) {
         this.plugin = plg;

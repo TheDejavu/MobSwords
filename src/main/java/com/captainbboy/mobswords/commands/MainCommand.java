@@ -19,7 +19,7 @@ import java.util.*;
 
 public class MainCommand implements CommandExecutor {
 
-    MobSwords plugin;
+    private final MobSwords plugin;
 
     public MainCommand(MobSwords plg) {
         this.plugin = plg;
@@ -102,90 +102,90 @@ public class MainCommand implements CommandExecutor {
             //'&e&l(!) &7/mobswords give &e<player> [keyfinder] [spawnerfinder] [autosell] [sellmult]'
             if (sender.hasPermission("mobswords.give")) {
                 Player target = this.plugin.getServer().getPlayer(args[1]);
-                if (target != null) {
-                    Material mat = Material.DIAMOND_SWORD;
-                    try {
-                        mat = Material.valueOf(this.plugin.getConfig().getString("mob-sword-item-type"));
-                    } catch (Exception e) {}
-                    ItemStack hoe = new ItemStack(mat, 1);
-
-                    ItemMeta meta = hoe.getItemMeta();
-                    meta.setDisplayName(MSUtil.cvtStr(this.plugin.getConfig().getString("mob-sword-item-name")));
-                    List<String> lores = new ArrayList();
-
-                    Integer keyFinderValue = 0;
-                    if(args.length > 2 && args[2] != null && MSUtil.isNumeric(args[2])) {
-                        keyFinderValue = (int)MSUtil.getNumber(args[2]);
-                    }
-
-                    Integer spawnerFinderValue = 0;
-                    if(args.length > 3 && args[3] != null && MSUtil.isNumeric(args[3])) {
-                        spawnerFinderValue = (int)MSUtil.getNumber(args[3]);
-                    }
-
-                    Double doubleChanceValue = 0.0;
-                    if(args.length > 4 && args[4] != null && MSUtil.isNumeric(args[4])) {
-                        doubleChanceValue = MSUtil.getNumber(args[4]);
-                    }
-
-                    boolean autosellValue = false;
-                    if(args.length > 5 && args[5] != null && MSUtil.isBoolean(args[5])) {
-                        autosellValue = MSUtil.getBoolean(args[5]);
-                    }
-
-                    Double sellMultiplierValue = 1.0;
-                    if(args.length > 6 && args[6] != null && MSUtil.isNumeric(args[6])) {
-                        sellMultiplierValue = MSUtil.getNumber(args[6]);
-                    }
-
-                    Boolean autoSellEnabled = false;
-
-                    for(String s : this.plugin.getConfig().getStringList("mob-sword-item-lore")) {
-                        s = s.replaceAll("\\{keyFinderValue}", String.valueOf(keyFinderValue));
-                        s = s.replaceAll("\\{spawnerFinderValue}", String.valueOf(spawnerFinderValue));
-                        s = s.replaceAll("\\{autosellValue}", String.valueOf(autosellValue));
-                        s = s.replaceAll("\\{doubleChanceValue}", String.valueOf(doubleChanceValue));
-                        if(s.contains("{autosellEnabled}")) {
-                            if(autoSellEnabled)
-                                s = s.replaceAll("\\{autosellEnabled}", "enabled");
-                            else
-                                s = s.replaceAll("\\{autosellEnabled}", "disabled");
-                        }
-                        s = s.replaceAll("\\{sellMultiplierValue}", String.valueOf(sellMultiplierValue));
-                        lores.add(MSUtil.cvtStr(s));
-                    }
-
-                    meta.setLore(lores);
-
-                    for (String s : this.plugin.getConfig().getStringList("mob-sword-item-enchants")) {
-                        String[] a = s.split(":");
-                        Enchantment enchant = Enchantment.getByName(a[0]);
-                        if(enchant != null && MSUtil.isNumeric(a[1])) {
-                            int lvl = (int) MSUtil.getNumber(a[1]);
-                            meta.addEnchant(enchant, lvl, true);
-                        }
-                    }
-
-                    meta.addItemFlags(new ItemFlag[]{ItemFlag.HIDE_ENCHANTS});
-                    meta.spigot().setUnbreakable(true);
-                    hoe.setItemMeta(meta);
-
-                    NBTItem nbti = new NBTItem(hoe);
-                    nbti.setBoolean("isMobSword", true);
-                    nbti.setInteger("mobSwordKeyFinder", keyFinderValue);
-                    nbti.setInteger("mobSwordSpawnerFinder", spawnerFinderValue);
-                    nbti.setBoolean("mobSwordAutoSell", autosellValue);
-                    nbti.setBoolean("mobSwordAutoSellEnabled", false);
-                    nbti.setDouble("mobSwordSellMult", sellMultiplierValue);
-                    nbti.setDouble("mobSwordDoubleChance", doubleChanceValue);
-
-                    target.getInventory().addItem(new ItemStack[]{nbti.getItem()});
-
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("item-sent-message")));
-                    target.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("item-received-message")));
-                } else {
+                if (target == null) {
                     sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-player-message")));
+                    return true;
                 }
+                Material mat = Material.DIAMOND_SWORD;
+                try {
+                    mat = Material.valueOf(this.plugin.getConfig().getString("mob-sword-item-type"));
+                } catch (Exception e) {}
+                ItemStack hoe = new ItemStack(mat, 1);
+
+                ItemMeta meta = hoe.getItemMeta();
+                meta.setDisplayName(MSUtil.cvtStr(this.plugin.getConfig().getString("mob-sword-item-name")));
+                List<String> lores = new ArrayList();
+
+                Integer keyFinderValue = 0;
+                if(args.length > 2 && args[2] != null && MSUtil.isNumeric(args[2])) {
+                    keyFinderValue = (int)MSUtil.getNumber(args[2]);
+                }
+
+                Integer spawnerFinderValue = 0;
+                if(args.length > 3 && args[3] != null && MSUtil.isNumeric(args[3])) {
+                    spawnerFinderValue = (int)MSUtil.getNumber(args[3]);
+                }
+
+                Double doubleChanceValue = 0.0;
+                if(args.length > 4 && args[4] != null && MSUtil.isNumeric(args[4])) {
+                    doubleChanceValue = MSUtil.getNumber(args[4]);
+                }
+
+                boolean autosellValue = false;
+                if(args.length > 5 && args[5] != null && MSUtil.isBoolean(args[5])) {
+                    autosellValue = MSUtil.getBoolean(args[5]);
+                }
+
+                Double sellMultiplierValue = 1.0;
+                if(args.length > 6 && args[6] != null && MSUtil.isNumeric(args[6])) {
+                    sellMultiplierValue = MSUtil.getNumber(args[6]);
+                }
+
+                Boolean autoSellEnabled = false;
+
+                for(String s : this.plugin.getConfig().getStringList("mob-sword-item-lore")) {
+                    s = s.replaceAll("\\{keyFinderValue}", String.valueOf(keyFinderValue));
+                    s = s.replaceAll("\\{spawnerFinderValue}", String.valueOf(spawnerFinderValue));
+                    s = s.replaceAll("\\{autosellValue}", String.valueOf(autosellValue));
+                    s = s.replaceAll("\\{doubleChanceValue}", String.valueOf(doubleChanceValue));
+                    if(s.contains("{autosellEnabled}")) {
+                        if(autoSellEnabled)
+                            s = s.replaceAll("\\{autosellEnabled}", "enabled");
+                        else
+                            s = s.replaceAll("\\{autosellEnabled}", "disabled");
+                    }
+                    s = s.replaceAll("\\{sellMultiplierValue}", String.valueOf(sellMultiplierValue));
+                    lores.add(MSUtil.cvtStr(s));
+                }
+
+                meta.setLore(lores);
+
+                for (String s : this.plugin.getConfig().getStringList("mob-sword-item-enchants")) {
+                    String[] a = s.split(":");
+                    Enchantment enchant = Enchantment.getByName(a[0]);
+                    if(enchant != null && MSUtil.isNumeric(a[1])) {
+                        int lvl = (int) MSUtil.getNumber(a[1]);
+                        meta.addEnchant(enchant, lvl, true);
+                    }
+                }
+
+                meta.addItemFlags(new ItemFlag[]{ItemFlag.HIDE_ENCHANTS});
+                meta.spigot().setUnbreakable(true);
+                hoe.setItemMeta(meta);
+
+                NBTItem nbti = new NBTItem(hoe);
+                nbti.setBoolean("isMobSword", true);
+                nbti.setInteger("mobSwordKeyFinder", keyFinderValue);
+                nbti.setInteger("mobSwordSpawnerFinder", spawnerFinderValue);
+                nbti.setBoolean("mobSwordAutoSell", autosellValue);
+                nbti.setBoolean("mobSwordAutoSellEnabled", false);
+                nbti.setDouble("mobSwordSellMult", sellMultiplierValue);
+                nbti.setDouble("mobSwordDoubleChance", doubleChanceValue);
+
+                target.getInventory().addItem(new ItemStack[]{nbti.getItem()});
+
+                sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("item-sent-message")));
+                target.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("item-received-message")));
             } else {
                 sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-permission-message")));
             }

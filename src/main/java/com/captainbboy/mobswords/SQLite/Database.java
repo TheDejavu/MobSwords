@@ -11,8 +11,8 @@ import java.util.logging.Level;
 
 
 public abstract class Database {
-    MobSwords plugin;
-    Connection connection;
+    public final MobSwords plugin;
+    public Connection connection;
     // The name of the table we created back in SQLite class.
     public String table = "currency";
     public Database(MobSwords instance){
@@ -73,7 +73,8 @@ public abstract class Database {
         ResultSet rs = null;
         try {
             conn = getSQLConnection();
-            ps = conn.prepareStatement("SELECT * FROM currency WHERE uuid = '"+playerUUID.toString()+"';");
+            ps = conn.prepareStatement("SELECT * FROM currency WHERE uuid = ?;");
+            ps.setString(1, playerUUID.toString());
 
             rs = ps.executeQuery();
             while(rs.next()){
@@ -102,8 +103,9 @@ public abstract class Database {
         ResultSet rs = null;
         try {
             conn = getSQLConnection();
-            ps = conn.prepareStatement("UPDATE currency SET amount = ? WHERE uuid = '"+playerUUID.toString()+"'");
+            ps = conn.prepareStatement("UPDATE currency SET amount = ? WHERE uuid = ?");
             ps.setString(1, String.valueOf(amount));
+            ps.setString(2, playerUUID.toString());
             ps.executeUpdate();
             if(plugin.getExpansion() != null)
                 plugin.getExpansion().setValue(playerUUID, amount);

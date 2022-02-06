@@ -23,7 +23,7 @@ import java.util.List;
 
 public class PlayerClickEvent implements Listener {
 
-    MobSwords plugin;
+    private final MobSwords plugin;
 
     public PlayerClickEvent(MobSwords plg) {
         this.plugin = plg;
