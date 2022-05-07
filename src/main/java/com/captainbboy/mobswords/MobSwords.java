@@ -8,9 +8,7 @@ import com.captainbboy.mobswords.events.PlayerClickEvent;
 import com.captainbboy.mobswords.events.PlayerSessionEvent;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,14 +28,9 @@ public final class MobSwords extends JavaPlugin {
     public void onEnable() {
 
         // Check Dependencies
-        if(getServer().getPluginManager().getPlugin("NBTAPI") == null) {
-            getServer().getConsoleSender().sendMessage(MSUtil.cvtStr("[&9&lMob&2Swords&7&l] &cYou must have NBTAPI installed!"));
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
 
         if (!setupEconomy()) {
-            getServer().getConsoleSender().sendMessage(MSUtil.cvtStr("[&9&lMob&2Swords&7&l] &cYou must have Vault and an Economy Plugin installed!"));
+            getServer().getConsoleSender().sendMessage(MSUtil.clr("[&9&lMob&2Swords&7&l] &cYou must have Vault and an Economy Plugin installed!"));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -59,10 +52,11 @@ public final class MobSwords extends JavaPlugin {
         // Commands
         getCommand("mobsword").setExecutor(new MainCommand(this));
 
-        getServer().getConsoleSender().sendMessage(MSUtil.cvtStr("&7&l[&9&lMob&2Swords&7&l] &fPlugin has been successfully loaded."));
+        getServer().getConsoleSender().sendMessage(MSUtil.clr("&7&l[&9&lMob&2Swords&7&l] &fPlugin has been successfully loaded."));
 
         startMinuteMessages();
 
+        // PAPI Extension
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             mobSwordExpansion = new MobSwordExpansion(this);
             mobSwordExpansion.register();
@@ -71,7 +65,7 @@ public final class MobSwords extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getServer().getConsoleSender().sendMessage(MSUtil.cvtStr("&7&l[&9&lMob&2Swords&7&l] &fPlugin has been successfully unloaded."));
+        getServer().getConsoleSender().sendMessage(MSUtil.clr("&7&l[&9&lMob&2Swords&7&l] &fPlugin has been successfully unloaded."));
     }
 
     public void startMinuteMessages() {
@@ -82,7 +76,7 @@ public final class MobSwords extends JavaPlugin {
             if(p != null) {
                 String message = this.getConfig().getString("money-in-last-minute-message");
                 message = message.replaceAll("\\{amount}", MSUtil.formatNumber(String.valueOf(map.get(uuid))));
-                p.sendMessage(MSUtil.cvtStr(message));
+                p.sendMessage(MSUtil.clr(message));
             }
         }
         this.playerHandler.clearAmountEarned();

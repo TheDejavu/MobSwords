@@ -42,7 +42,7 @@ public class MobEvents implements Listener {
                             String[] cmds = commands.split(" \\| ");
                             this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), cmds[0].replaceAll("\\{PLAYER}", killer.getName()));
                             if (cmds.length > 1 && cmds[1] != null && cmds[1] != "")
-                                Bukkit.broadcastMessage(MSUtil.cvtStr(
+                                Bukkit.broadcastMessage(MSUtil.clr(
                                         cmds[1].replaceAll("\\{PLAYER}", killer.getName())
                                 ));
                         }
@@ -53,7 +53,7 @@ public class MobEvents implements Listener {
                             String[] cmds = commands.split(" \\| ");
                             this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), cmds[0].replaceAll("\\{PLAYER}", killer.getName()));
                             if (cmds.length > 1 && cmds[1] != null && cmds[1] != "")
-                                Bukkit.broadcastMessage(MSUtil.cvtStr(
+                                Bukkit.broadcastMessage(MSUtil.clr(
                                         cmds[1].replaceAll("\\{PLAYER}", killer.getName())
                                 ));
                         }

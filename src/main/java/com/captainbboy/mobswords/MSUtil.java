@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class MSUtil {
 
-    public static String cvtStr(String input) {
+    public static String clr(String input) {
         return ChatColor.translateAlternateColorCodes('&', input);
     }
 
@@ -22,7 +22,7 @@ public class MSUtil {
         } else if (getSlot(player, m) != -1) {
             player.getInventory().addItem(new ItemStack[]{new ItemStack(m)});
         } else {
-            player.sendMessage(cvtStr("&a&l(!) &7Your &ainventory &7is full!"));
+            player.sendMessage(clr("&a&l(!) &7Your &ainventory &7is full!"));
             player.getWorld().dropItem(player.getLocation(), new ItemStack(m));
         }
     }
@@ -33,7 +33,7 @@ public class MSUtil {
         } else if (getSlot(player, m) != -1) {
             player.getInventory().addItem(new ItemStack[]{new ItemStack(m, amount)});
         } else {
-            player.sendMessage(cvtStr("&a&l(!) &7Your &ainventory &7is full!"));
+            player.sendMessage(clr("&a&l(!) &7Your &ainventory &7is full!"));
             player.getWorld().dropItem(player.getLocation(), new ItemStack(m, amount));
         }
     }

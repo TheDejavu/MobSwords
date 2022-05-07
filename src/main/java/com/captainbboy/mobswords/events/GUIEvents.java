@@ -3,8 +3,8 @@ package com.captainbboy.mobswords.events;
 import com.captainbboy.mobswords.MSUtil;
 import com.captainbboy.mobswords.MobSwords;
 import com.captainbboy.mobswords.SQLite.SQLite;
+import com.captainbboy.mobswords.upgrades.UpgradeMenu;
 import de.tr7zw.nbtapi.NBTItem;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -32,7 +32,7 @@ public class GUIEvents implements Listener {
     // Check for clicks on items
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
-        if (!e.getInventory().getTitle().equals(MSUtil.cvtStr("&5&lMobSword Upgrades"))) return;
+        if (!e.getInventory().getTitle().equals(MSUtil.clr("&5&lMobSword Upgrades"))) return;
 
         e.setCancelled(true);
 
@@ -48,7 +48,7 @@ public class GUIEvents implements Listener {
         NBTItem nbtItem = new NBTItem(sword);
 
         if (!nbtItem.hasKey("isMobSword") || !nbtItem.getBoolean("isMobSword")) {
-            p.sendMessage(MSUtil.cvtStr(config.getString("no-sword-message")));
+            p.sendMessage(MSUtil.clr(config.getString("no-sword-message")));
             return;
         }
 
@@ -66,7 +66,7 @@ public class GUIEvents implements Listener {
             case TRIPWIRE_HOOK:
                 // Clicked Key Finder Upgrade
                 if(keyFinderLevel >= config.getInt("max-key-finder")) {
-                    p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Key Finder")));
+                    p.sendMessage(MSUtil.clr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Key Finder")));
                     break;
                 }
                 Double keyFinderPrice = calculatePrice(config.getDouble("key-finder-price-start"), config.getDouble("key-finder-price-rate"), Double.valueOf(keyFinderLevel));
@@ -81,7 +81,7 @@ public class GUIEvents implements Listener {
             case MOB_SPAWNER:
                 // Clicked Spawner Finder Upgrade
                 if(spawnerFinderLevel >= config.getInt("max-spawner-finder")) {
-                    p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Spawner Finder")));
+                    p.sendMessage(MSUtil.clr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Spawner Finder")));
                     break;
                 }
                 Double spawnerFinderPrice = calculatePrice(config.getDouble("spawner-finder-price-start"), config.getDouble("spawner-finder-price-rate"), Double.valueOf(spawnerFinderLevel));
@@ -96,7 +96,7 @@ public class GUIEvents implements Listener {
             case GOLD_SWORD:
                 // Clicked AutoSell Upgrade
                 if(autoSell == true) {
-                    p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "AutoSell")));
+                    p.sendMessage(MSUtil.clr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "AutoSell")));
                     break;
                 }
                 Double autoSellPrice = config.getDouble("auto-sell-price");
@@ -111,7 +111,7 @@ public class GUIEvents implements Listener {
             case GOLD_NUGGET:
                 // Clicked Sell Multiplier Upgrade
                 if(sellMultiplier >= config.getDouble("max-sell-multiplier")) {
-                    p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Sell Multiplier")));
+                    p.sendMessage(MSUtil.clr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Sell Multiplier")));
                     break;
                 }
                 Double sellMultIncr = config.getDouble("sell-multiplier-increment");
@@ -127,7 +127,7 @@ public class GUIEvents implements Listener {
             case DIAMOND:
                 // Clicked Double Chance Upgrade
                 if(doubleChance >= config.getDouble("max-double-chance")) {
-                    p.sendMessage(MSUtil.cvtStr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Double Chance")));
+                    p.sendMessage(MSUtil.clr(config.getString("stat-already-maxed-message").replaceAll("\\{type}", "Double Chance")));
                     break;
                 }
                 Double doubleChanceIncr = config.getDouble("double-chance-increment");
@@ -145,8 +145,8 @@ public class GUIEvents implements Listener {
 
     // Cancel dragging in our inventory
     @EventHandler
-    public void onInventoryClick(final InventoryDragEvent e) {
-        if (e.getInventory().getTitle().equals(MSUtil.cvtStr("&5&lMobSword Upgrades"))) {
+    public void onInventoryDrag(final InventoryDragEvent e) {
+        if (e.getInventory().getTitle().equals(MSUtil.clr("&5&lMobSword Upgrades"))) {
             e.setCancelled(true);
         }
     }
@@ -157,11 +157,11 @@ public class GUIEvents implements Listener {
 
         Double bal = MSUtil.getNumber(db.getBalance(p.getUniqueId()));
         if(bal < price) {
-            p.sendMessage(MSUtil.cvtStr(config.getString("too-poor-message")));
+            p.sendMessage(MSUtil.clr(config.getString("too-poor-message")));
             return false;
         } else {
             db.setBalance(p.getUniqueId(), bal - price);
-            String message = MSUtil.cvtStr(config.getString("successful-upgrade-purchase-message"));
+            String message = MSUtil.clr(config.getString("successful-upgrade-purchase-message"));
             message = message.replaceAll("\\{type}", type);
             message = message.replaceAll("\\{price}", MSUtil.formatNumber(price));
             p.sendMessage(message);
@@ -170,17 +170,17 @@ public class GUIEvents implements Listener {
     }
 
     private void endPurchase(Player p) {
-        PlayerClickEvent.promptUpgradeMenu(this.plugin, p, new NBTItem(p.getItemInHand()));
+        UpgradeMenu.promptUpgradeMenu(this.plugin, p, new NBTItem(p.getItemInHand()));
     }
 
     private ItemStack handleItem(ItemStack sword, Integer keyFinderLevel, Integer spawnerFinderLevel, Boolean autoSell, Double sellMultiplier, Double doubleChance, Boolean autoSellEnabled) {
         ItemMeta meta = sword.getItemMeta();
-        meta.setDisplayName(MSUtil.cvtStr(this.plugin.getConfig().getString("mob-sword-item-name")));
+        meta.setDisplayName(MSUtil.clr(this.plugin.getConfig().getString("mob-sword-item-name")));
         List<String> lores = new ArrayList();
-        Iterator var9 = this.plugin.getConfig().getStringList("mob-sword-item-lore").iterator();
+        Iterator loreIterator = this.plugin.getConfig().getStringList("mob-sword-item-lore").iterator();
 
-        while(var9.hasNext()) {
-            String s = (String)var9.next();
+        while(loreIterator.hasNext()) {
+            String s = (String) loreIterator.next();
             s = s.replaceAll("\\{keyFinderValue}", String.valueOf(keyFinderLevel));
             s = s.replaceAll("\\{spawnerFinderValue}", String.valueOf(spawnerFinderLevel));
             s = s.replaceAll("\\{autosellValue}", String.valueOf(autoSell));
@@ -192,7 +192,7 @@ public class GUIEvents implements Listener {
             }
             s = s.replaceAll("\\{sellMultiplierValue}", String.valueOf(MSUtil.roundToHundredths(sellMultiplier)));
             s = s.replaceAll("\\{doubleChanceValue}", String.valueOf(MSUtil.roundToHundredths(doubleChance)));
-            lores.add(MSUtil.cvtStr(s));
+            lores.add(MSUtil.clr(s));
         }
         meta.setLore(lores);
         meta.addEnchant(Enchantment.DURABILITY, 1, true);

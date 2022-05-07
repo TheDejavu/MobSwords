@@ -37,7 +37,7 @@ public class MainCommand implements CommandExecutor {
 
             for(String msg : this.plugin.getConfig().getStringList("help-command")) {
                 msg = msg.replaceAll("\\{version}", this.plugin.currVersion);
-                sender.sendMessage(MSUtil.cvtStr(msg));
+                sender.sendMessage(MSUtil.clr(msg));
             }
 
             return true;
@@ -46,7 +46,7 @@ public class MainCommand implements CommandExecutor {
 
             if(sender.hasPermission("mobswords.reload")) {
                 this.plugin.reloadConfig();
-                sender.sendMessage(MSUtil.cvtStr(
+                sender.sendMessage(MSUtil.clr(
                         "&7&l[&9&lMob&2Swords&7&l] &aReload successful."
                 ));
             }
@@ -78,22 +78,22 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
                 times = MSUtil.sortByValueInt(times, true);
-                sender.sendMessage(MSUtil.cvtStr("&a&l(!) &aDid " + amount + " runs and got: "));
+                sender.sendMessage(MSUtil.clr("&a&l(!) &aDid " + amount + " runs and got: "));
                 for (Map.Entry<String, Integer> entry : times.entrySet()) {
-                    sender.sendMessage(MSUtil.cvtStr(
+                    sender.sendMessage(MSUtil.clr(
                             "&a&l(!) " + entry.getValue() + "/" + amount + " (" + Math.round(entry.getValue() / (amount / 100)) + "%) " + entry.getKey()
                     ));
                 }
                 return true;
             } else {
-                sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-permission-message")));
+                sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-permission-message")));
             }
         } else if (args[0].equalsIgnoreCase("give")) {
             if (args.length < 2 || args[1] == null || args[1].equals("")) {
                 for(String msg : this.plugin.getConfig().getStringList("help-command")) {
                     msg = msg.replaceAll("\\{version}", this.plugin.currVersion);
                     if(!msg.contains("/mobswords") || (msg.contains("/mobswords") && msg.contains("give"))) {
-                        sender.sendMessage(MSUtil.cvtStr(msg));
+                        sender.sendMessage(MSUtil.clr(msg));
                     }
                 }
                 return true;
@@ -103,7 +103,7 @@ public class MainCommand implements CommandExecutor {
             if (sender.hasPermission("mobswords.give")) {
                 Player target = this.plugin.getServer().getPlayer(args[1]);
                 if (target == null) {
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-player-message")));
+                    sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-player-message")));
                     return true;
                 }
                 Material mat = Material.DIAMOND_SWORD;
@@ -113,7 +113,7 @@ public class MainCommand implements CommandExecutor {
                 ItemStack hoe = new ItemStack(mat, 1);
 
                 ItemMeta meta = hoe.getItemMeta();
-                meta.setDisplayName(MSUtil.cvtStr(this.plugin.getConfig().getString("mob-sword-item-name")));
+                meta.setDisplayName(MSUtil.clr(this.plugin.getConfig().getString("mob-sword-item-name")));
                 List<String> lores = new ArrayList();
 
                 Integer keyFinderValue = 0;
@@ -155,7 +155,7 @@ public class MainCommand implements CommandExecutor {
                             s = s.replaceAll("\\{autosellEnabled}", "disabled");
                     }
                     s = s.replaceAll("\\{sellMultiplierValue}", String.valueOf(sellMultiplierValue));
-                    lores.add(MSUtil.cvtStr(s));
+                    lores.add(MSUtil.clr(s));
                 }
 
                 meta.setLore(lores);
@@ -184,10 +184,10 @@ public class MainCommand implements CommandExecutor {
 
                 target.getInventory().addItem(new ItemStack[]{nbti.getItem()});
 
-                sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("item-sent-message")));
-                target.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("item-received-message")));
+                sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("item-sent-message")));
+                target.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("item-received-message")));
             } else {
-                sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-permission-message")));
+                sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-permission-message")));
             }
         } else if (args.length >= 1 && (args[0].equalsIgnoreCase("balance") || args[0].equalsIgnoreCase("bal"))) {
             if(args.length == 1) {
@@ -195,9 +195,9 @@ public class MainCommand implements CommandExecutor {
                     String msg = this.plugin.getConfig().getString("balance-message");
                     msg = msg.replaceAll("\\{amount}", MSUtil.formatNumber(this.plugin.getSQLite().getBalance(((Player) sender).getUniqueId())));
                     msg = msg.replaceAll("\\{customCurrency}", currencyName);
-                    sender.sendMessage(MSUtil.cvtStr(msg));
+                    sender.sendMessage(MSUtil.clr(msg));
                 } else {
-                    sender.sendMessage(MSUtil.cvtStr(
+                    sender.sendMessage(MSUtil.clr(
                             "&c&l(!) &cOnly players can run this command!"
                     ));
                 }
@@ -205,7 +205,7 @@ public class MainCommand implements CommandExecutor {
                 if (sender.hasPermission("mobswords.viewothersbalance")) {
                     OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                     if(target == null) {
-                        sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-player-message")));
+                        sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-player-message")));
                         return true;
                     }
                     UUID uuid = target.getUniqueId();
@@ -216,9 +216,9 @@ public class MainCommand implements CommandExecutor {
                     msg = msg.replaceAll("you", target.getName());
                     msg = msg.replaceAll("have", "has");
                     msg = msg.replaceAll("Have", "Has");
-                    sender.sendMessage(MSUtil.cvtStr(msg));
+                    sender.sendMessage(MSUtil.clr(msg));
                 } else {
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-permission-message")));
+                    sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-permission-message")));
                 }
             }
         } else if (args.length >= 1 && (args[0].equalsIgnoreCase("setbalance") || args[0].equalsIgnoreCase("setbal"))) {
@@ -227,19 +227,19 @@ public class MainCommand implements CommandExecutor {
                     for(String msg : this.plugin.getConfig().getStringList("help-command")) {
                         msg = msg.replaceAll("\\{version}", this.plugin.currVersion);
                         if(!msg.contains("/mobswords") || (msg.contains("/mobswords") && msg.contains("setbal"))) {
-                            sender.sendMessage(MSUtil.cvtStr(msg));
+                            sender.sendMessage(MSUtil.clr(msg));
                         }
                     }
                     return true;
                 }
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                 if(target == null) {
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-player-message")));
+                    sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-player-message")));
                     return true;
                 }
                 UUID uuid = target.getUniqueId();
                 if(!MSUtil.isNumeric(args[2])) {
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("not-number-message")));
+                    sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("not-number-message")));
                     return true;
                 }
                 Double value = MSUtil.getNumber(args[2]);
@@ -249,16 +249,16 @@ public class MainCommand implements CommandExecutor {
                 msg = msg.replaceAll("\\{amount}", MSUtil.formatNumber(value));
                 msg = msg.replaceAll("\\{customCurrency}", currencyName);
                 msg = msg.replaceAll("\\{player}", target.getName());
-                sender.sendMessage(MSUtil.cvtStr(msg));
+                sender.sendMessage(MSUtil.clr(msg));
 
                 String msg2 = this.plugin.getConfig().getString("changed-balance-message");
                 msg2 = msg2.replaceAll("\\{amount}", MSUtil.formatNumber(value));
                 msg2 = msg2.replaceAll("\\{customCurrency}", currencyName);
                 if(target.isOnline()) {
-                    target.getPlayer().sendMessage(MSUtil.cvtStr(msg2));
+                    target.getPlayer().sendMessage(MSUtil.clr(msg2));
                 }
             } else {
-                sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-permission-message")));
+                sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-permission-message")));
             }
         } else if (args.length >= 1 && (args[0].equalsIgnoreCase("addbalance") || args[0].equalsIgnoreCase("addbal"))) {
             if (sender.hasPermission("mobswords.adminset")) {
@@ -266,19 +266,19 @@ public class MainCommand implements CommandExecutor {
                     for(String msg : this.plugin.getConfig().getStringList("help-command")) {
                         msg = msg.replaceAll("\\{version}", this.plugin.currVersion);
                         if(!msg.contains("/mobswords") || (msg.contains("/mobswords") && msg.contains("addbal"))) {
-                            sender.sendMessage(MSUtil.cvtStr(msg));
+                            sender.sendMessage(MSUtil.clr(msg));
                         }
                     }
                     return true;
                 }
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                 if(target == null) {
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-player-message")));
+                    sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-player-message")));
                     return true;
                 }
                 UUID uuid = target.getUniqueId();
                 if(!MSUtil.isNumeric(args[2])) {
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("not-number-message")));
+                    sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("not-number-message")));
                     return true;
                 }
                 Double value = MSUtil.getNumber(args[2]);
@@ -288,16 +288,16 @@ public class MainCommand implements CommandExecutor {
                 msg = msg.replaceAll("\\{amount}", MSUtil.formatNumber(newValue));
                 msg = msg.replaceAll("\\{customCurrency}", currencyName);
                 msg = msg.replaceAll("\\{player}", target.getName());
-                sender.sendMessage(MSUtil.cvtStr(msg));
+                sender.sendMessage(MSUtil.clr(msg));
 
                 String msg2 = this.plugin.getConfig().getString("changed-balance-message");
                 msg2 = msg2.replaceAll("\\{amount}", MSUtil.formatNumber(newValue));
                 msg2 = msg2.replaceAll("\\{customCurrency}", currencyName);
                 if(target.isOnline()) {
-                    target.getPlayer().sendMessage(MSUtil.cvtStr(msg2));
+                    target.getPlayer().sendMessage(MSUtil.clr(msg2));
                 }
             } else {
-                sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-permission-message")));
+                sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-permission-message")));
             }
         } else if (args.length >= 1 && (args[0].equalsIgnoreCase("removebalance") || args[0].equalsIgnoreCase("removebal") || args[0].equalsIgnoreCase("subtractbalance") || args[0].equalsIgnoreCase("subtractbal"))) {
             if (sender.hasPermission("mobswords.adminset")) {
@@ -305,19 +305,19 @@ public class MainCommand implements CommandExecutor {
                     for(String msg : this.plugin.getConfig().getStringList("help-command")) {
                         msg = msg.replaceAll("\\{version}", this.plugin.currVersion);
                         if(!msg.contains("/mobswords") || (msg.contains("/mobswords") && msg.contains("removebal"))) {
-                            sender.sendMessage(MSUtil.cvtStr(msg));
+                            sender.sendMessage(MSUtil.clr(msg));
                         }
                     }
                     return true;
                 }
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                 if(target == null) {
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-player-message")));
+                    sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-player-message")));
                     return true;
                 }
                 UUID uuid = target.getUniqueId();
                 if(!MSUtil.isNumeric(args[2])) {
-                    sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("not-number-message")));
+                    sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("not-number-message")));
                     return true;
                 }
                 Double value = MSUtil.getNumber(args[2]);
@@ -327,21 +327,21 @@ public class MainCommand implements CommandExecutor {
                 msg = msg.replaceAll("\\{amount}", MSUtil.formatNumber(newValue));
                 msg = msg.replaceAll("\\{customCurrency}", currencyName);
                 msg = msg.replaceAll("\\{player}", target.getName());
-                sender.sendMessage(MSUtil.cvtStr(msg));
+                sender.sendMessage(MSUtil.clr(msg));
 
                 String msg2 = this.plugin.getConfig().getString("changed-balance-message");
                 msg2 = msg2.replaceAll("\\{amount}", MSUtil.formatNumber(newValue));
                 msg2 = msg2.replaceAll("\\{customCurrency}", currencyName);
                 if(target.isOnline()) {
-                    target.getPlayer().sendMessage(MSUtil.cvtStr(msg2));
+                    target.getPlayer().sendMessage(MSUtil.clr(msg2));
                 }
             } else {
-                sender.sendMessage(MSUtil.cvtStr(this.plugin.getConfig().getString("no-permission-message")));
+                sender.sendMessage(MSUtil.clr(this.plugin.getConfig().getString("no-permission-message")));
             }
         } else {
             for(String msg : this.plugin.getConfig().getStringList("help-command")) {
                 msg = msg.replaceAll("\\{version}", this.plugin.currVersion);
-                sender.sendMessage(MSUtil.cvtStr(msg));
+                sender.sendMessage(MSUtil.clr(msg));
             }
             return true;
         }
