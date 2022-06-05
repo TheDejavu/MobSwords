@@ -6,9 +6,13 @@ import com.captainbboy.mobswords.events.GUIEvents;
 import com.captainbboy.mobswords.events.MobEvents;
 import com.captainbboy.mobswords.events.PlayerClickEvent;
 import com.captainbboy.mobswords.events.PlayerSessionEvent;
+import lombok.Getter;
+import net.brcdev.shopgui.ShopGuiPlusApi;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +25,7 @@ public final class MobSwords extends JavaPlugin {
     private MobSwordExpansion mobSwordExpansion;
     private PlayerClickEvent playerClickEvent = new PlayerClickEvent(this);
     private SQLite sqLite;
+    @Getter private static double starPrice;
     public String currVersion = "1.1.1";
     public Economy eco;
 
@@ -61,6 +66,15 @@ public final class MobSwords extends JavaPlugin {
             mobSwordExpansion = new MobSwordExpansion(this);
             mobSwordExpansion.register();
         }
+        // ShopGuiPlus
+        if(Bukkit.getPluginManager().getPlugin("ShopGUIPlus ") != null) {
+            this.starPrice = ShopGuiPlusApi.getItemStackPriceSell(new ItemStack(Material.NETHER_STAR));
+            getServer().getConsoleSender().sendMessage(MSUtil.clr("&7&l[&9&lMob&2Swords&7&l] &fShopGUIPlus found, using star price from shop"));
+        }else{
+            this.starPrice = this.getConfig().getInt("price-of-star");
+            getServer().getConsoleSender().sendMessage(MSUtil.clr("&7&l[&9&lMob&2Swords&7&l] &fUsing star price from config.yml"));
+        }
+
     }
 
     @Override
