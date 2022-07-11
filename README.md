@@ -12,5 +12,5 @@ This is a 1.8.8 Spigot plugin that adds upgradable, customizable harvester hoes 
 * /mobsword addbalance \<username> [value] - Add to the balance of a user in mobsword currency.
 * /mobsword subtractbalance \<username> [value] - Remove from the balance of a user in mobsword currency.
 
-## TODO:
-* Add plugin support for ShopGUIPlus and similar shop plugins to automatically gather the price of netherstars.
+## Added
+* Automatically gather the price of netherstars from ShopGUIPlus.

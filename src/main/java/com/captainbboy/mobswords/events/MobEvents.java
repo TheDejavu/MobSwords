@@ -60,7 +60,7 @@ public class MobEvents implements Listener {
 
                         if (nbtItem.hasKey("mobSwordAutoSell") && nbtItem.getBoolean("mobSwordAutoSell") && nbtItem.hasKey("mobSwordAutoSellEnabled") && nbtItem.getBoolean("mobSwordAutoSellEnabled")) {
 
-                            int priceOfStar = this.plugin.getConfig().getInt("price-of-star");
+                            double priceOfStar = MobSwords.getStarPrice();
                             Double multiplier = 1.0;
                             if (nbtItem.hasKey("mobSwordSellMult")) {
                                 multiplier = nbtItem.getDouble("mobSwordSellMult");

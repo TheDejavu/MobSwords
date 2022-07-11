@@ -18,9 +18,9 @@ public class MSUtil {
 
     public static void givePlayerItem(Player player, Material m) {
         if (player.getInventory().firstEmpty() != -1) {
-            player.getInventory().addItem(new ItemStack[]{new ItemStack(m)});
+            player.getInventory().addItem(new ItemStack(m));
         } else if (getSlot(player, m) != -1) {
-            player.getInventory().addItem(new ItemStack[]{new ItemStack(m)});
+            player.getInventory().addItem(new ItemStack(m));
         } else {
             player.sendMessage(clr("&a&l(!) &7Your &ainventory &7is full!"));
             player.getWorld().dropItem(player.getLocation(), new ItemStack(m));
@@ -29,9 +29,9 @@ public class MSUtil {
 
     public static void givePlayerItem(Player player, Material m, int amount) {
         if (player.getInventory().firstEmpty() != -1) {
-            player.getInventory().addItem(new ItemStack[]{new ItemStack(m, amount)});
+            player.getInventory().addItem(new ItemStack(m, amount));
         } else if (getSlot(player, m) != -1) {
-            player.getInventory().addItem(new ItemStack[]{new ItemStack(m, amount)});
+            player.getInventory().addItem(new ItemStack(m, amount));
         } else {
             player.sendMessage(clr("&a&l(!) &7Your &ainventory &7is full!"));
             player.getWorld().dropItem(player.getLocation(), new ItemStack(m, amount));
